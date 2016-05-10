@@ -1,0 +1,31 @@
+DECLARE
+    v_code  NUMBER;
+    v_errm  VARCHAR2(255);
+BEGIN
+FOR oldRow IN ( SELECT curve_id FROM load_set2_curve WHERE load_set_id = 12384) LOOP
+BEGIN
+    DBMS_OUTPUT.PUT_LINE ( '---' ||oldRow.curve_id);
+ -- DBMS_OUTPUT.PUT_LINE('Renaming curve for id=' ||oldRow||);
+ 
+--UPDATE from: ctr.long to: LgT.LNG where curve like: %ctr.long%'
+UPDATE dw.curve SET name = REGEXP_REPLACE(name, 'ctr.long', 'LgT.LNG') WHERE name LIKE '%ctr.long%' AND id = oldRow.curve_id;
+UPDATE load_set2_curve SET external_id = REGEXP_REPLACE(external_id, 'ctr.long', 'LgT.LNG') WHERE external_id LIKE '%ctr.long%' AND curve_id = oldRow.curve_id;
+--REMOVE  where curve like: %ctr.long%'
+DELETE dw.curve WHERE name LIKE '%ctr.long%';
+DELETE load_set2_curve WHERE external_id LIKE '%ctr.long%';
+
+--UPDATE from: ctr.short to: ShT.LNG where curve like: %ctr.short%'
+UPDATE dw.curve SET name = REGEXP_REPLACE(name, 'ctr.short', 'ShT.LNG') WHERE name LIKE '%ctr.short%' AND id = oldRow.curve_id;
+UPDATE load_set2_curve SET external_id = REGEXP_REPLACE(external_id, 'ctr.short', 'ShT.LNG') WHERE external_id LIKE '%ctr.short%' AND curve_id = oldRow.curve_id;
+--REMOVE  where curve like: %ctr.short%'
+DELETE dw.curve WHERE name LIKE '%ctr.short%';
+DELETE load_set2_curve WHERE external_id LIKE '%ctr.short%';
+
+
+EXCEPTION  WHEN OTHERS  THEN
+    v_code := SQLCODE;
+    v_errm := SUBSTR(SQLERRM, 1, 250);
+    DBMS_OUTPUT.PUT_LINE (v_code || ' ' || v_errm);
+END;
+END LOOP;
+end;

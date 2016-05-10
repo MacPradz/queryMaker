@@ -1,0 +1,5 @@
+#loadset_ID: 12384
+#curvename piece to be replaced , new curvename piece , where curve like
+ctr.long , LgT.LNG , %ctr.long%
+ctr.short , ShT.LNG , %ctr.short%
+
