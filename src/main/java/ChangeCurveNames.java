@@ -61,7 +61,9 @@ public class ChangeCurveNames {
             finalQuery.append(String.format(LOAD_SET2_CURVE_REMOVE, whereLike) + "\n\n");
 
         }
-        return finalQuery.append(QUERY_END).toString();
+        String ans =finalQuery.append(QUERY_END).toString();
+
+        return ans.replaceAll("\\n",System.getProperty("line.separator"));
     }
 
     private CSVParser getCsv() {
